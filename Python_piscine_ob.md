@@ -1,8 +1,8 @@
-# Python Piscine
+## Python Piscine
 
 ---
 
-## Interpreting in Python
+# Interpreting in Python
 
 Interpreting is the process where Python executes code by translating it into instructions the Python Virtual Machine (PVM) can run, rather than compiling it directly into native machine code. Python is technically compiled to bytecode first, then interpreted by the PVM.
 
@@ -17,7 +17,7 @@ Interpreting is the process where Python executes code by translating it into in
 
 ---
 
-## 1 — Starting the Python Interpreter (CPython)
+# 1 — Starting the Python Interpreter (CPython)
 
 Before any Python source code is read, the operating system starts the Python interpreter itself, which is the CPython executable. When you run `python3 script.py`, the OS locates the compiled `python3` binary (built from C code using a compiler such as GCC), loads it into memory, sets up the process environment (stack, heap, and CPU registers) like every native program (Python, Chrome, GCC, Bash, etc.), and jumps to its entry point (`main()` in C). CPython then initializes its runtime environment by setting up memory management, the garbage collector, built-in types, the import system, and the Python Virtual Machine (PVM). All of this work is performed in machine code, before any lexing, parsing, or bytecode generation of your `.py` file begins. Only after this initialization phase does CPython read and compile the Python source code.
 
@@ -46,7 +46,7 @@ Before any Python source code is read, the operating system starts the Python in
 
 ---
 
-## 2 — Lexing (Lexical Analysis / Tokenization)
+# 2 — Lexing (Lexical Analysis / Tokenization)
 
 Lexing is the first step in Python's frontend, performed by the Python compiler component inside the CPython interpreter, where the raw source code is converted into a stream of meaningful symbols called **tokens**. It turns the human-readable text into units the parser can understand.
 
@@ -69,7 +69,7 @@ You can see the lexer's output by running: `python3 -m tokenize test.py`
 **Example source file (`test.py`):**
 
 ```python
-# test.py
+## test.py
 
 a = 2
 x = a + 3
@@ -121,7 +121,7 @@ greet("Alice")
 
 ---
 
-## 3— Parsing (Syntactic Analysis)
+# 3— Parsing (Syntactic Analysis)
 
 Parsing is the second step in Python's frontend, performed by the Python compiler component inside the CPython interpreter. The stream of tokens from the lexer is analyzed according to Python's grammar rules. The parser checks that the code is structurally correct and builds a hierarchical representation called an **Abstract Syntax Tree (AST)**, which captures the meaning of the program without irrelevant details like whitespace or comments.
 
@@ -169,7 +169,7 @@ Module(
 
 ---
 
-## 4 — Bytecode Generation and Inspection
+# 4 — Bytecode Generation and Inspection
 
 After parsing, Python converts the AST into **bytecode** — a low-level, platform-independent set of instructions that the Python Virtual Machine (PVM) can execute. Bytecode is analogous to assembly code in C, but instead of running directly on the CPU, it runs on Python's virtual machine. The PVM interprets Python bytecode and executes its semantics by invoking precompiled C functions, whose machine instructions are executed directly by the CPU.
 
@@ -219,7 +219,7 @@ Disassembly of <code object greet at 0x7f2cc09375a0, file "test.py", line 4>:
 
 ---
 
-## 5 — Execution by the Python Virtual Machine (PVM)
+# 5 — Execution by the Python Virtual Machine (PVM)
 
 After Python generates bytecode, it does not run directly on your CPU. Instead, the **Python Virtual Machine (PVM)** executes it. The PVM is the interpreter inside Python that reads bytecode instructions one by one and performs the corresponding operations in memory.
 
@@ -265,13 +265,13 @@ When the PVM encounters the `BINARY_ADD` opcode, it invokes a C function that po
 
 ---
 
-## 6 — Generate .pyc Files
+# 6 — Generate .pyc Files
 
 In Python, you can compile a script to bytecode without executing it. This produces a `.pyc` file, which is a cached version of the bytecode. Python uses these files to speed up future executions by loading the precompiled bytecode instead of recompiling the source code each time.
 
 ```bash
 python3 -m py_compile your_file.py
-# Output: __pycache__/your_file.cpython-312.pyc
+## Output: __pycache__/your_file.cpython-312.pyc
 ```
 
 **`.pyc` is not machine code.** A `.pyc` file looks like random symbols, but it stores Python bytecode — a low-level, platform-independent instruction set for the PVM. The CPU never runs `.pyc` directly; the PVM reads and interprets the bytecode.
@@ -282,7 +282,7 @@ python3 -m py_compile your_file.py
 
 ---
 
-## Python Interpreter Execution Flow
+# Python Interpreter Execution Flow
 
 ```
 ┌─────────────────────────────────────┐
@@ -335,7 +335,7 @@ python3 -m py_compile your_file.py
 
 ---
 
-## Python3 Command
+# Python3 Command
 
 `python3` is the command used to run the Python3 interpreter. It exists because Python has two major versions: Python 2 (now obsolete) and Python 3 (current and supported). On many systems, `python` may refer to Python 2 or may not exist at all, so `python3` is provided to explicitly run Python 3.
 
@@ -345,7 +345,7 @@ On most modern systems, `python`, `python3`, and `python3.13` all ultimately exe
 
 ---
 
-## Module
+# Module
 
 A **module** is a Python file that contains reusable code, including functions, classes, and variables, designed to organize and simplify your programs. Modules can be:
 - **Standard** – built-in modules like `math`, `os`
@@ -381,7 +381,7 @@ From Test2: 20
 
 ---
 
-## How Python Executes a Module on Import
+# How Python Executes a Module on Import
 
 When a Python file is executed, the interpreter processes its statements sequentially from top to bottom. If it encounters an `import` statement, Python temporarily pauses execution and begins loading the target module. During this import process, Python:
 
@@ -453,7 +453,7 @@ two.py starts
 
 ---
 
-## Module Object Inspection
+# Module Object Inspection
 
 **`t1.py`:**
 
@@ -503,7 +503,7 @@ sys.modules['t2']: <module 't2' from '/home/kali/1337/python/test/t2.py'>
 
 ---
 
-## `if __name__ == "__main__"`
+# `if __name__ == "__main__"`
 
 The `if __name__ == "__main__":` check determines whether the Python script is being **run directly** or **imported as a module**.
 
@@ -548,7 +548,7 @@ Hello from Test1!
 
 ---
 
-## How Python Stores Variables, Functions, and Classes
+# How Python Stores Variables, Functions, and Classes
 
 Python uses both a **stack** and a **heap**, but in a highly abstracted and automatic way compared to languages like C. In Python, **everything is an object**, including integers, strings, functions, classes, modules, lists, and dictionaries.
 
@@ -564,33 +564,33 @@ Global variables are maintained in a **module namespace dictionary** accessible 
 **`*1` — Everything is an object:**
 
 ```python
-# Integers
+## Integers
 x = 10
 print(x, "→ type:", type(x), "→ id:", hex(id(x)))
 
-# Strings
+## Strings
 s = "hello"
 print(s, "→ type:", type(s), "→ id:", hex(id(s)))
 
-# Lists
+## Lists
 lst = [1, 2, 3]
 print(lst, "→ type:", type(lst), "→ id:", hex(id(lst)))
 
-# Dictionaries
+## Dictionaries
 d = {"a": 1, "b": 2}
 print(d, "→ type:", type(d), "→ id:", hex(id(d)))
 
-# Functions
+## Functions
 def greet():
     return "Hello"
 print(greet, "→ type:", type(greet), "→ id:", hex(id(greet)))
 
-# Classes
+## Classes
 class Car:
     pass
 print(Car, "→ type:", type(Car), "→ id:", hex(id(Car)))
 
-# Modules
+## Modules
 import math
 print(math, "→ type:", type(math), "→ id:", hex(id(math)))
 ```
@@ -609,28 +609,28 @@ hello → type: <class 'str'> → id: 0x737537a34d80
 **`*2` — Immutable vs mutable objects:**
 
 ```python
-# Immutable object (int)
+## Immutable object (int)
 x = 10
 y = x
 
 print("x id:", hex(id(x)))
 print("y id:", hex(id(y)))
 
-# Change y
+## Change y
 y = 20
 
 print("After changing y:")
 print("x id:", hex(id(x)), "x value:", x)
 print("y id:", hex(id(y)), "y value:", y)
 
-# Mutable object (list)
+## Mutable object (list)
 a = [1, 2, 3]
 b = a
 
 print("Before change:")
 print("a id:", hex(id(a)), "b id:", hex(id(b)))
 
-# Modify b — it's like a is modified
+## Modify b — it's like a is modified
 b.append(4)
 
 print("After change:")
@@ -655,7 +655,7 @@ b: [1, 2, 3, 4] b id: 0x7ffa63906480
 **`*3` — globals():**
 
 ```python
-# Global variable
+## Global variable
 x = 42
 y = "hello"
 
@@ -678,7 +678,7 @@ Access y via globals(): hello
 
 ---
 
-## Shebang
+# Shebang
 
 A **shebang** is a special line at the very beginning of a script that starts with `#!`. It is a Unix convention indicating which interpreter should be used to execute the file.
 
@@ -694,7 +694,7 @@ Alternatively, you can use a direct shebang like `#!/usr/bin/python3`, which exp
 
 ---
 
-## Try & Except
+# Try & Except
 
 Python provides a structured mechanism to handle runtime errors using the `try` statement and its associated blocks.
 
@@ -732,7 +732,7 @@ finally:
 
 ---
 
-## Custom Exception Class
+# Custom Exception Class
 
 A **custom exception class** is a user-defined class that inherits from the built-in `Exception` class and is used to represent application-specific error conditions. In Python, only classes that inherit from `BaseException` can be raised or caught as exceptions.
 
@@ -755,7 +755,7 @@ except Exeption as e:
 
 ---
 
-## Exception Inheritance in Python
+# Exception Inheritance in Python
 
 Exception classes fully support inheritance. All exceptions ultimately inherit from `BaseException`, with most application-level exceptions inheriting from `Exception`. Custom exceptions can inherit from other exceptions, creating a logical hierarchy.
 
@@ -782,12 +782,12 @@ for error in errors:
 
 ---
 
-## Custom Exception Classes and Messages
+# Custom Exception Classes and Messages
 
 Using `super().__init__(message)` within the constructor calls the parent class's constructor, ensuring the message is properly passed up the inheritance chain.
 
 ```python
-# --- Custom Exception Classes ---
+## --- Custom Exception Classes ---
 class GardenError(Exception):
     pass
 
@@ -811,11 +811,11 @@ except GardenError as e:
 
 `super().__init__(message)` means:
 
-> “Call the `__init__` method of the parent class of `PlantError` and pass `message` to it.”
+> "Call the `__init__` method of the parent class of `PlantError` and pass `message` to it."
 
 The parent here is Exception through GardenError.
 
-# What `super()` Actually Returns
+## What `super()` Actually Returns
 
 `super()` returns a **proxy object** that lets you access methods of the **next class in the Method Resolution Order (MRO)**.
 
@@ -847,7 +847,7 @@ GardenError.__init__(self, message)
 
 But since `GardenError` doesn't define `__init__`, Python continues up the chain until it finds one in `Exception`.
 
-# Why It Looks Like “Sending a Message”
+## Why It Looks Like "Sending a Message"
 
 It feels like sending a message because the call is **forwarded up the inheritance chain**.
 
@@ -865,7 +865,7 @@ Exception.__init__(message)
 
 So instead of directly naming the parent class, `super()` says:
 
-> “Let the next class in the hierarchy handle this.”
+> "Let the next class in the hierarchy handle this."
 
 When the message reaches the base exception classes, it is **stored inside the exception object** so Python can later display or retrieve it.
 
@@ -877,7 +877,7 @@ super().__init__(message)
 
 eventually reaches the constructor of Exception (which inherits from BaseException).
 
-# What the Base Exception Does With the Message
+## What the Base Exception Does With the Message
 
 Internally, the constructor stores the message inside the attribute **`args`**.
 
@@ -903,7 +903,7 @@ args = ("The tomato plant is wilting!",)
 
 and stores it inside the exception object.
 
-# Where the Message Lives
+## Where the Message Lives
 
 After creation, the exception object looks roughly like this:
 
@@ -913,7 +913,7 @@ PlantError instance
 └── type = PlantError
 ```
 
-# Why `print(e)` Shows the Message
+## Why `print(e)` Shows the Message
 
 When you do:
 
@@ -922,7 +922,7 @@ except PlantError as e:
     print(e)
 ```
 
-Python calls the exception’s `__str__()` method (defined in BaseException).
+Python calls the exception's `__str__()` method (defined in BaseException).
 
 That method returns a string based on `args`.
 
@@ -939,7 +939,7 @@ So Python prints:
 The tomato plant is wilting!
 ```
 
-# You Can Access It Directly
+## You Can Access It Directly
 
 Example:
 
@@ -956,7 +956,7 @@ Output:
 ('The tomato plant is wilting!',)
 ```
 
-# Full Flow in Your Program
+## Full Flow in Your Program
 
 ```
 raise PlantError("The tomato plant is wilting!")
@@ -991,14 +991,14 @@ returns "The tomato plant is wilting!"
 
  **Summary**
 
-The base exception doesn’t “handle” the message in a complex way. It simply:
+The base exception doesn't "handle" the message in a complex way. It simply:
 
 1. **stores it in `args`**
 2. **returns it when the exception is printed**
 
 ---
 
-## Comprehensions & Generators
+# Comprehensions & Generators
 
 In Python there are **two ways to create generators**, and they differ mainly by **syntax**, not by concept. Both produce **lazy iterators** that generate values on demand.
 
@@ -1006,7 +1006,7 @@ In Python there are **two ways to create generators**, and they differ mainly by
 
 These generators are part of the iteration system defined in the Python iterator protocol.
 
-# 1. Generator Expressions (Comprehension-style)
+## 1. Generator Expressions (Comprehension-style)
 
   
 
@@ -1082,7 +1082,7 @@ Generator expression → produces values when needed
 
 
 
-# 2. Generator Functions (`yield`)
+## 2. Generator Functions (`yield`)
 
   
 
@@ -1138,7 +1138,7 @@ Key mechanism:
 * Execution resumes on the next `next()` call
 
 
-# Execution Model of Generator Functions
+## Execution Model of Generator Functions
 
   
 
@@ -1169,7 +1169,7 @@ next() → resume from yield
 ```
 
 
-# Conceptual Equivalence
+## Conceptual Equivalence
 
   
 
@@ -1201,7 +1201,7 @@ yield x*x
 
 Both produce a **generator object**.
 
-# Summary
+## Summary
 
   
 
@@ -1235,25 +1235,25 @@ The difference is **syntax and complexity of the logic**.
 **Generator vs normal function:**
 
 ```python
-# Generator function example
+## Generator function example
 def generate_numbers():
     print("Generator starting")
     for i in range(3):
         print(f"Producing {i}")
         yield i  # pauses here and produces value only when requested
 
-# Create a generator object (the function will not execute)
+## Create a generator object (the function will not execute)
 gen_obj = generate_numbers()
 print("Generator created (nothing produced yet)\n")
 
-# Normal function example
+## Normal function example
 def normal_numbers():
     print("Normal function starting")
     for i in range(3):
         print(f"Producing {i}")
         return i  # returns immediately, loop stops after first iteration
 
-# Call normal function
+## Call normal function
 normal_result = normal_numbers()
 ```
 
@@ -1270,21 +1270,21 @@ Producing 0
 **List comprehension vs generator expression:**
 
 ```python
-# List comprehension (eager)
+## List comprehension (eager)
 numbers = range(5)
 
-# This builds the full list immediately
+## This builds the full list immediately
 squares_list = [n * n for n in numbers]
 print("List comprehension (all values computed at once):")
 print(squares_list)
 
-# Generator expression (lazy)
-# This creates a generator object; values are computed only when requested
+## Generator expression (lazy)
+## This creates a generator object; values are computed only when requested
 squares_gen = (n * n for n in numbers)
 print("\nGenerator expression (values computed lazily):")
 print(squares_gen)  # just shows generator object
 
-# Iterate to get values one by one
+## Iterate to get values one by one
 print("Iterating generator:")
 for val in squares_gen:
     print(val)
@@ -1310,24 +1310,24 @@ Iterating generator:
 **`lazy_squares` generator:**
 
 ```python
-# Generator function that produces squares
+## Generator function that produces squares
 def lazy_squares(n):
     for i in range(n):
         print(f"Computing square of {i}")
         yield i * i  # value is produced only when requested
 
-# Create generator object
+## Create generator object
 squares = lazy_squares(5)
 
 print("Generator created")  # Nothing has been computed yet
 
-# Request the first value
+## Request the first value
 print(next(squares))
 
-# Request the next value
+## Request the next value
 print(next(squares))
 
-# Iterate over the remaining values
+## Iterate over the remaining values
 for val in squares:
     print(val)
 ```
@@ -1437,11 +1437,11 @@ Generator exhausted
 ```
 
 ---
-## The `next()` Function
+# The `next()` Function
 In Python, `next()` is a **built-in function** used to **retrieve the next item from an iterator**. It is the standard way to move through any object that implements the **iterator protocol**.
 
 
-# 1. Syntax
+## 1. Syntax
 
 ```python id="fr5p38"
 next(iterator[, default])
@@ -1451,9 +1451,9 @@ next(iterator[, default])
 * `default` → optional value returned if the iterator is exhausted (instead of raising `StopIteration`).
 
 
-# 2. What It Does
+## 2. What It Does
 
-* Calls the iterator’s `__next__()` method internally.
+* Calls the iterator's `__next__()` method internally.
 * Returns the **next value** in the sequence.
 * If there are no more values:
 
@@ -1461,7 +1461,7 @@ next(iterator[, default])
   * With `default` → returns the `default` value
 
 
-# 3. Example With a Generator Expression
+## 3. Example With a Generator Expression
 
 ```python id="1w9e8p"
 gen = (x*x for x in range(2))
@@ -1475,7 +1475,7 @@ Here, `next()` **pauses the generator, resumes it, and returns the next value**.
 
 
 
-# 4. Using Default to Avoid StopIteration and Using `next()` with a List
+## 4. Using Default to Avoid StopIteration and Using `next()` with a List
 
 next() works with any iterator, not just generators. In Python, lists, tuples, dictionaries, and sets can all provide iterators.
 
@@ -1489,10 +1489,10 @@ Explanation:
 
 * `iter(numbers)` creates an iterator object.
 * `next(it)` retrieves elements one by one from that iterator.
-* Lists themselves are **iterable**, but not iterators — that’s why we call `iter()` first.
+* Lists themselves are **iterable**, but not iterators — that's why we call `iter()` first.
 
 
-# 5. Behind the Scenes
+## 5. Behind the Scenes
 
 `next()` essentially does:
 
@@ -1513,9 +1513,9 @@ For an Iterator (like list, tuple, dict, etc.) Python internally does:
 
 2. **Retrieve the next element** from the underlying iterable
 
-   * For a list, it’s the next index in the list.
-   * For a dictionary, it’s the next key (or value/items if that iterator).
-   * For a file, it’s the next line.
+   * For a list, it's the next index in the list.
+   * For a dictionary, it's the next key (or value/items if that iterator).
+   * For a file, it's the next line.
 
 3. **Advance the internal state** of the iterator so the next call to `next()` will get the following element.
 
@@ -1525,7 +1525,7 @@ For an Iterator (like list, tuple, dict, etc.) Python internally does:
 
 ---
 
-## The `iter()` Function
+# The `iter()` Function
 
 The `iter()` function creates an iterator from an iterable object (list, tuple, string, etc.). An iterator keeps track of its current position and can produce the next item using `next()`.
 
@@ -1549,35 +1549,35 @@ Python roughly does:
 it = some_iterable.__iter__()
 ```
 
-* The iterable’s `__iter__()` method returns an **iterator object**.
+* The iterable's `__iter__()` method returns an **iterator object**.
 * The iterator object has `__next__()` to give you the next value.
 
 **Example — converting a list to an iterator:**
 
 ```python
-# A normal list is iterable, but not an iterator
+## A normal list is iterable, but not an iterator
 numbers = [10, 20, 30]
 
-# Convert the list into an iterator
+## Convert the list into an iterator
 it = iter(numbers)
 
-# Manually access elements using next()
+## Manually access elements using next()
 print(next(it))  # 10
 print(next(it))  # 20
 print(next(it))  # 30
 
-# The iterator is now exhausted
-# next(it)  # Would raise StopIteration
+## The iterator is now exhausted
+## next(it)  # Would raise StopIteration
 ```
 
 **How `for` uses `iter()` internally:**
 
 ```python
-# This:
+## This:
 for x in [1, 2, 3]:
     print(x)
 
-# Is roughly equivalent to:
+## Is roughly equivalent to:
 it = iter([1, 2, 3])
 while True:
     try:
@@ -1602,7 +1602,7 @@ def f():
 for line in iter(f, "quit"):
     print("You typed:", line)
 
-# output:
+## output:
     # 1
     # 2
     # 3
@@ -1613,7 +1613,7 @@ for line in iter(f, "quit"):
 
 ---
 
-## Command-Line Arguments
+# Command-Line Arguments
 
 **Command-line arguments** are values provided to a Python program at the moment it is executed from the terminal, allowing the user to pass information without modifying the source code. In Python, these arguments are accessed through the `sys.argv` list.
 
@@ -1621,10 +1621,10 @@ for line in iter(f, "quit"):
 - `sys.argv[1:]` → the arguments supplied by the user
 
 ```python
-# Example command:
-# python3 script.py hello 42
-# Inside the program:
-# sys.argv = ["script.py", "hello", "42"]
+## Example command:
+## python3 script.py hello 42
+## Inside the program:
+## sys.argv = ["script.py", "hello", "42"]
 ```
 
 **Example:**
@@ -1657,7 +1657,7 @@ No arguments provided
 
 ---
 
-## Packing & Unpacking
+# Packing & Unpacking
 
 **Packing** collects multiple values into a single composite object. This occurs in function definitions using `*args` and `**kwargs`:
 - `*args` → gathers all extra positional arguments into a **tuple**
@@ -1677,25 +1677,25 @@ b = next(it)
 **Summary:**
 
 ```python
-# Packing — Positional (*args):
+## Packing — Positional (*args):
 def func(*args):
     print(args)
 
-# Packing — Keyword (**kwargs):
+## Packing — Keyword (**kwargs):
 def func(**kwargs):
     print(kwargs)
 
-# Unpacking in Assignment:
+## Unpacking in Assignment:
 a, b, c = [1, 2, 3]
 
-# Extended Unpacking:
+## Extended Unpacking:
 a, *middle, c = [1, 2, 3, 4, 5]
 all_unique = set().union(*player_sets.values())
 ```
 
 ---
 
-## `isinstance()`
+# `isinstance()`
 
 `isinstance()` is a built-in Python function used for **runtime type checking**. It determines whether an object is an instance of a specified class (or a subclass thereof).
 
@@ -1726,7 +1726,7 @@ print(isinstance(d, Animal))       # True (because Dog inherits from Animal)
 
 ---
 
-## `all()`
+# `all()`
 
 The `all()` function evaluates whether **every element** in an iterable is truthy. It returns `True` if all elements are considered true in a boolean context, and `False` if at least one element is falsy. Falsy values include `False`, `None`, `0`, empty sequences like `[]` or `""`, and empty collections like `{}` or `set()`. If the iterable is empty, `all()` returns `True` by default (vacuous truth).
 
@@ -1748,17 +1748,17 @@ print(all(check(n) for n in [1, 2, -3, 4]))
 
 ---
 
-## `.strip()`
+# `.strip()`
 
 The `.strip()` method removes unwanted characters from the **beginning and end** of a string. By default, it strips all types of whitespace (spaces, tabs, newlines, carriage returns, vertical tabs, form feeds). It can also accept a custom string of characters to remove.
 
 ```python
-# Example 1: Default stripping (whitespace)
+## Example 1: Default stripping (whitespace)
 user_input = "   Alice \n"
 clean_input = user_input.strip()
 print(repr(clean_input))  # Output: 'Alice'
 
-# Example 2: Removing specific characters
+## Example 2: Removing specific characters
 filename = ">>>report.txt<<<"
 clean_filename = filename.strip("><")
 print(clean_filename)     # Output: 'report.txt'
@@ -1766,7 +1766,7 @@ print(clean_filename)     # Output: 'report.txt'
 
 ---
 
-## `sys.stdin`, `sys.stdout`, `sys.stderr`
+# `sys.stdin`, `sys.stdout`, `sys.stderr`
 
 Special file-like objects from the `sys` module that handle input and output at the system level.
 
@@ -1783,15 +1783,15 @@ Special file-like objects from the `sys` module that handle input and output at 
 ```python
 import sys
 
-# 1. sys.stdin → reading input
+## 1. sys.stdin → reading input
 print("Enter your name:", end=' ')
 name = sys.stdin.readline().strip()  # reads one line from standard input
 print(f"Hello, {name}!\n")
 
-# 2. sys.stdout → writing output
+## 2. sys.stdout → writing output
 sys.stdout.write("This is written directly to standard output.\n")
 
-# 3. sys.stderr → writing error messages
+## 3. sys.stderr → writing error messages
 sys.stderr.write("Warning: This is an error message!\n")
 ```
 
@@ -1809,7 +1809,7 @@ print("Done")
 
 ---
 
-## Package
+# Package
 
 A **package** is a directory that organizes related modules into a structured namespace, allowing large programs to be divided into logical, reusable components. Packages group multiple modules and subpackages together so they can be imported using hierarchical names.
 
@@ -1876,10 +1876,10 @@ print(mymodule.bar)
 **API (Application Programming Interface):** The set of functions, classes, and variables a module or package exposes for others to use.
 
 ```python
-# mypackage/__init__.py
+## mypackage/__init__.py
 from .printer import print_hello
-# print_hello() is part of the package's API
-# print_secret() in printer.py is internal, not part of the API
+## print_hello() is part of the package's API
+## print_secret() in printer.py is internal, not part of the API
 ```
 
 ---
@@ -1923,20 +1923,20 @@ from .elements import create_fire, create_water
 ```python
 import alchemy
 
-# Accessible because they were exposed in __init__.py
+## Accessible because they were exposed in __init__.py
 alchemy.create_fire()
 alchemy.create_water()
 
-# Not accessible at package level
-# alchemy.secret_spell()  -> AttributeError
+## Not accessible at package level
+## alchemy.secret_spell()  -> AttributeError
 
-# But direct module access still works
+## But direct module access still works
 alchemy.elements.secret_spell()
 ```
 
 ---
 
-## Import Styles
+# Import Styles
 
 ### 1️⃣ Basic `import module`
 
@@ -2009,26 +2009,26 @@ print(pi)         # pi is directly accessible
 ### 6️⃣ Importing Submodules in Packages
 
 ```python
-# package/
-# └── subpackage/
-#     └── module.py
+## package/
+## └── subpackage/
+##     └── module.py
 
 import package.subpackage.module
 package.subpackage.module.func()
 
-# Or, using from:
+## Or, using from:
 from package.subpackage.module import func
 func()
 ```
 
 ---
 
-## Circular Dependency
+# Circular Dependency
 
 A **circular dependency** happens when two or more modules try to import each other, creating a loop that Python can't resolve during loading.
 
 ```python
-# module a.py
+## module a.py
 from b import func_b
 
 def func_a():
@@ -2037,7 +2037,7 @@ def func_a():
 ```
 
 ```python
-# module b.py
+## module b.py
 from a import func_a
 
 def func_b():
@@ -2060,7 +2060,7 @@ If you try to `import a` or `import b`, Python gets stuck because:
 Import the module inside a function instead of at the top.
 
 ```python
-# spellbook.py
+## spellbook.py
 def record_spell(spell_name, ingredients):
     from validator import validate_ingredients  # imported here
     result = validate_ingredients(ingredients)
@@ -2074,7 +2074,7 @@ Python doesn't import `validator` until the function runs → no circular proble
 Pass the function or object from one module to another instead of importing.
 
 ```python
-# spellbook.py
+## spellbook.py
 def record_spell(spell_name, ingredients, validator_func):
     result = validator_func(ingredients)
     return f"Spell recorded: {spell_name} ({result})"
@@ -2087,7 +2087,7 @@ Now `spellbook` doesn't need to import `validator`. The caller provides `validat
 Move shared functions to a new module that both modules can safely import.
 
 ```python
-# utils.py
+## utils.py
 def validate_ingredients(ingredients):
     ...
 ```
@@ -2096,7 +2096,7 @@ Both `spellbook.py` and `validator.py` import `utils.py`. No circular import occ
 
 ---
 
-## Absolute & Relative Imports
+# Absolute & Relative Imports
 
 Both are ways to tell Python where to find a module or function.
 
@@ -2107,14 +2107,14 @@ Both are ways to tell Python where to find a module or function.
 Specifies the full path from the top-level package.
 
 ```python
-# alchemy/
-#     __init__.py
-#     elements.py
-#     transmutation/
-#         __init__.py
-#         basic.py
+## alchemy/
+##     __init__.py
+##     elements.py
+##     transmutation/
+##         __init__.py
+##         basic.py
 
-# absolute import
+## absolute import
 from alchemy.elements import create_fire
 
 def lead_to_gold():
@@ -2134,7 +2134,7 @@ Specifies the path relative to the current module using dots:
 - `...` → grandparent, etc.
 
 ```python
-# relative import
+## relative import
 from .basic import lead_to_gold
 from ..elements import create_water
 
@@ -2172,7 +2172,7 @@ In `advanced.py`, `from ..basic import lead_to_gold` uses `..` to move one packa
 
 ---
 
-## Protocol
+# Protocol
 
 In Python, a **Protocol** is a type-hinting mechanism that defines a set of methods or behaviors an object must implement so Python knows how to interact with it. It is essentially an interface defined by **behavior**, not by inheritance. This idea is called **duck typing**.
 
@@ -2189,14 +2189,14 @@ Protocols do **not** enforce anything at runtime — Python does not inject meth
 ```python
 from typing import Protocol
 
-# 1 Define a Protocol
+## 1 Define a Protocol
 class Reader(Protocol):
     def read(self) -> str:
         ...
     def tt(self) -> str:
         ...
 
-# 2 Classes remain the same
+## 2 Classes remain the same
 class FileReader:
     def read(self) -> str:
         return "file data"
@@ -2205,7 +2205,7 @@ class APIReader:
     def read(self) -> str:
         return "API data"
 
-# 3 Function uses the Protocol in type hint
+## 3 Function uses the Protocol in type hint
 def process(obj: Reader) -> None:
     data = obj.read()
     print(data)
