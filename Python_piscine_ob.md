@@ -17,7 +17,7 @@ Interpreting is the process where Python executes code by translating it into in
 
 ---
 
-# 1 — Starting the Python Interpreter (CPython)
+# 1 - Starting the Python Interpreter (CPython)
 
 Before any Python source code is read, the operating system starts the Python interpreter itself, which is the CPython executable. When you run `python3 script.py`, the OS locates the compiled `python3` binary (built from C code using a compiler such as GCC), loads it into memory, sets up the process environment (stack, heap, and CPU registers) like every native program (Python, Chrome, GCC, Bash, etc.), and jumps to its entry point (`main()` in C). CPython then initializes its runtime environment by setting up memory management, the garbage collector, built-in types, the import system, and the Python Virtual Machine (PVM). All of this work is performed in machine code, before any lexing, parsing, or bytecode generation of your `.py` file begins. Only after this initialization phase does CPython read and compile the Python source code.
 
@@ -46,7 +46,7 @@ Before any Python source code is read, the operating system starts the Python in
 
 ---
 
-# 2 — Lexing (Lexical Analysis / Tokenization)
+# 2 - Lexing (Lexical Analysis / Tokenization)
 
 Lexing is the first step in Python's frontend, performed by the Python compiler component inside the CPython interpreter, where the raw source code is converted into a stream of meaningful symbols called **tokens**. It turns the human-readable text into units the parser can understand.
 
@@ -121,7 +121,7 @@ greet("Alice")
 
 ---
 
-# 3— Parsing (Syntactic Analysis)
+# 3 - Parsing (Syntactic Analysis)
 
 Parsing is the second step in Python's frontend, performed by the Python compiler component inside the CPython interpreter. The stream of tokens from the lexer is analyzed according to Python's grammar rules. The parser checks that the code is structurally correct and builds a hierarchical representation called an **Abstract Syntax Tree (AST)**, which captures the meaning of the program without irrelevant details like whitespace or comments.
 
@@ -169,7 +169,7 @@ Module(
 
 ---
 
-# 4 — Bytecode Generation and Inspection
+# 4 - Bytecode Generation and Inspection
 
 After parsing, Python converts the AST into **bytecode** — a low-level, platform-independent set of instructions that the Python Virtual Machine (PVM) can execute. Bytecode is analogous to assembly code in C, but instead of running directly on the CPU, it runs on Python's virtual machine. The PVM interprets Python bytecode and executes its semantics by invoking precompiled C functions, whose machine instructions are executed directly by the CPU.
 
@@ -219,7 +219,7 @@ Disassembly of <code object greet at 0x7f2cc09375a0, file "test.py", line 4>:
 
 ---
 
-# 5 — Execution by the Python Virtual Machine (PVM)
+# 5 - Execution by the Python Virtual Machine (PVM)
 
 After Python generates bytecode, it does not run directly on your CPU. Instead, the **Python Virtual Machine (PVM)** executes it. The PVM is the interpreter inside Python that reads bytecode instructions one by one and performs the corresponding operations in memory.
 
@@ -265,7 +265,7 @@ When the PVM encounters the `BINARY_ADD` opcode, it invokes a C function that po
 
 ---
 
-# 6 — Generate .pyc Files
+# 6 - Generate .pyc Files
 
 In Python, you can compile a script to bytecode without executing it. This produces a `.pyc` file, which is a cached version of the bytecode. Python uses these files to speed up future executions by loading the precompiled bytecode instead of recompiling the source code each time.
 
@@ -345,6 +345,161 @@ On most modern systems, `python`, `python3`, and `python3.13` all ultimately exe
 
 ---
 
+**Type hints** in Python are annotations that specify the **expected type of variables, function parameters, and return values**. They help with **readability, static analysis, and tooling**, but they **do not change how Python runs the code** (Python does not enforce them at runtime by default).
+
+---
+# Type hints
+## 1. Function type hints
+
+You annotate parameters and return values.
+
+```python
+def add(a: int, b: int) -> int:
+    return a + b
+```
+
+Meaning:
+
+* `a: int` → `a` should be an integer
+* `b: int` → `b` should be an integer
+* `-> int` → function returns an integer
+
+Python will still run this:
+
+```python
+add("3", "4")   # no runtime error from type hints
+```
+
+Type hints are mainly checked by tools like mypy.
+
+## 2. Variable type hints
+
+You can annotate variables.
+
+```python
+age: int = 17
+name: str = "Alex"
+```
+
+You can also declare without assigning:
+
+```python
+score: float
+```
+
+
+## 3. Container types
+
+For lists, dictionaries, sets, etc.
+
+```python
+numbers: list[int] = [1, 2, 3]
+names: list[str] = ["Ali", "Sara"]
+
+scores: dict[str, int] = {
+    "Ali": 90,
+    "Sara": 95
+}
+```
+
+Meaning:
+
+* `list[int]` → list containing integers
+* `dict[str, int]` → dictionary with `str` keys and `int` values
+
+
+## 4. Multiple possible types
+
+Using `|` (Python 3.10+):
+
+```python
+def parse(value: int | str) -> int:
+    return int(value)
+```
+
+Before 3.10 this used:
+
+```python
+from typing import Union
+Union[int, str]
+```
+
+## 5. Optional values
+
+If something can be `None`:
+
+```python
+def find_user(name: str) -> str | None:
+    ...
+```
+
+Meaning the function returns either:
+
+* `str`
+* `None`
+---
+# The `typing` module 
+
+In Python there are **two common styles of type hints**:
+
+1. **Built-in generic types (lowercase)** (The one mentioned before)
+2. **Typing module types (Capitalized, imported)**
+
+Before Python 3.9, containers could **not be subscripted with types**, so Python introduced the typing module.
+
+Example:
+
+```python
+from typing import List, Dict, Set
+
+numbers: List[int]
+scores: Dict[str, int]
+tags: Set[str]
+```
+
+Here:
+
+* `List`
+* `Dict`
+* `Set`
+
+are **typing objects**, not the real containers.
+
+---
+
+## Direct comparison
+
+| Modern style      | Old typing style  |
+| ----------------- | ----------------- |
+| `list[int]`       | `List[int]`       |
+| `dict[str, int]`  | `Dict[str, int]`  |
+| `set[str]`        | `Set[str]`        |
+| `tuple[int, str]` | `Tuple[int, str]` |
+
+Modern Python prefers the **left column**.
+
+---
+
+## When you still need `typing`
+
+Some types **only exist in `typing`**, for example:
+
+```python
+from typing import Iterable, Iterator, Generator, Callable
+```
+
+Example:
+
+```python
+from typing import Iterable
+
+def process(data: Iterable[int]) -> None:
+    ...
+```
+
+`Iterable` is **not a built-in container**, so it must come from `typing`.
+
+---
 # Module
 
 A **module** is a Python file that contains reusable code, including functions, classes, and variables, designed to organize and simplify your programs. Modules can be:
