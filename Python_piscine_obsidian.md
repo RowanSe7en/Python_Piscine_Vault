@@ -344,11 +344,122 @@ When you run `python3` and see something like `[GCC 15.2.0]`, this does not mean
 On most modern systems, `python`, `python3`, and `python3.13` all ultimately execute the same binary executable, all found in `/usr/bin/`.
 
 ---
+# Data Types sizes
 
-**Type hints** in Python are annotations that specify the **expected type of variables, function parameters, and return values**. They help with **readability, static analysis, and tooling**, but they **do not change how Python runs the code** (Python does not enforce them at runtime by default).
+In Python, variable **types do not have fixed sizes like in C or Java**. Python objects are dynamic and include metadata (reference count, type pointer, etc.), so their memory size is larger and can vary by system and Python build.
+
+You can inspect the size of an object using:
+
+```python
+import sys
+sys.getsizeof(obj)
+```
+
+Below are **typical sizes on a 64-bit CPython implementation** (values may vary slightly).
+# Numeric types
+
+| Type      | Example | Typical size                |
+| --------- | ------- | --------------------------- |
+| `bool`    | `True`  | 28 bytes                    |
+| `int`     | `10`    | 28 bytes (grows with value) |
+| `float`   | `3.14`  | 24 bytes                    |
+| `complex` | `2+3j`  | 32 bytes                    |
+
+Notes:
+
+* `int` uses **arbitrary precision**, so very large numbers require more memory.
+* `float` follows **IEEE-754 double precision (64 bits)** internally.
+
+# Text type
+
+| Type  | Example | Typical size           |
+| ----- | ------- | ---------------------- |
+| `str` | `"a"`   | ~50 bytes + characters |
+
+Strings grow with length because characters are stored internally.
+
+Example:
+
+```python
+sys.getsizeof("a")      # ~50 bytes
+sys.getsizeof("hello")  # larger
+```
+
+# Container types
+
+| Type    | Example   | Typical size         |
+| ------- | --------- | -------------------- |
+| `list`  | `[1,2,3]` | ~56 bytes + elements |
+| `tuple` | `(1,2,3)` | ~48 bytes + elements |
+| `set`   | `{1,2,3}` | ~216 bytes           |
+| `dict`  | `{"a":1}` | ~232 bytes           |
+
+Notes:
+
+* Containers store **references to objects**, not the objects themselves.
+* Their size grows as elements are added.
+
+# Special types
+
+| Type       | Example     | Typical size |
+| ---------- | ----------- | ------------ |
+| `NoneType` | `None`      | ~16 bytes    |
+| `range`    | `range(10)` | ~48 bytes    |
+
+# Example measurement
+
+```python
+import sys
+
+# numeric types
+print("int:", sys.getsizeof(10))
+print("bool:", sys.getsizeof(True))
+print("float:", sys.getsizeof(3.14))
+
+# string
+print("empty str:", sys.getsizeof(""))
+print("char:", sys.getsizeof("a"))
+ 
+# containers
+print("empty list:", sys.getsizeof([]))
+print("list:", sys.getsizeof([1, 2, 3]))
+print("empty tuple:", sys.getsizeof(()))
+print("tuple:", sys.getsizeof((1, 2, 3)))
+print("empty set:", sys.getsizeof({}))
+print("set:", sys.getsizeof({1, 2, 3}))
+print("dict:", sys.getsizeof({"a": 1, "b": 2}))
+ 
+# special types
+
+print("None:", sys.getsizeof(None))
+print("range:", sys.getsizeof(range(10)))
+```
+
+**output**:
+
+```
+int: 28
+bool: 28
+float: 24
+empty str: 41
+char: 42
+list: 88
+list: 56
+tuple: 64
+set: 216
+dict: 184
+None: 16
+range: 48
+```
+
+✅ **Key takeaway**
+
+Python objects include **extra memory for metadata**, so they are much larger than primitive types in low-level languages. Sizes are **implementation-dependent** and **can grow dynamically**.
 
 ---
 # Type hints
+
+**Type hints** in Python are annotations that specify the **expected type of variables, function parameters, and return values**. They help with **readability, static analysis, and tooling**, but they **do not change how Python runs the code** (Python does not enforce them at runtime by default).
 ## 1. Function type hints
 
 You annotate parameters and return values.
@@ -2346,42 +2457,40 @@ from typing import Protocol
 
 ## 1 Define a Protocol
 class Reader(Protocol):
-    def read(self) -> str:
-        ...
-    def tt(self) -> str:
-        ...
+	def read(self) -> str:
+		...
 
-## 2 Classes remain the same
+## 2 Class satisfiec the protocol
 class FileReader:
-    def read(self) -> str:
-        return "file data"
-
-class APIReader:
-    def read(self) -> str:
-        return "API data"
+	def read(self) -> str:
+		return "file data"
 
 ## 3 Function uses the Protocol in type hint
 def process(obj: Reader) -> None:
-    data = obj.read()
-    print(data)
+	data = obj.read()
+	print(data)
 
-process(FileReader())  # Works
-process(APIReader())   # Works
+process(FileReader()) # Works
 
-process(123)           # ❌ Runtime error: int has no read()
+process(123) # ❌ Runtime error: int has no read()
 ```
 
 **Output:**
 ```
-└─$ python3 three.py
+└─$ python3 one.py
 file data
-API data
 Traceback (most recent call last):
-  File "three.py", line 26, in <module>
-    process(123)
+  File "/home/kali/1337/cursus/Python_modules/test/one.py", line 20, in <module>
+    process(123)           # ❌ Runtime error: int has no read()
+    ~~~~~~~^^^^^
+  File "/home/kali/1337/cursus/Python_modules/test/one.py", line 15, in process
+    data = obj.read()
+           ^^^^^^^^
 AttributeError: 'int' object has no attribute 'read'. Did you mean: 'real'?
+```
 
-└─$ mypy three.py
-three.py:26: error: Argument 1 to "process" has incompatible type "int"; expected "Reader"  [arg-type]
+```
+└─$ mypy one.py
+one.py:20: error: Argument 1 to "process" has incompatible type "int"; expected "Reader"  [arg-type]
 Found 1 error in 1 file (checked 1 source file)
 ```
