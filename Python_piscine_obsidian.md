@@ -2117,18 +2117,64 @@ mypackage.print_secret()   # ERROR
 
 `__init__.py` does **not** hide functions completely; it simply controls what is conveniently exposed through the package namespace. Direct module access remains possible (e.g., `mypackage.printer.print_secret()`).
 
----
-
 ### What Happens During Import
 
-When Python sees `import alchemy`, it:
+When Python sees for example `import alchemy`, it:
 1. Locates folder `alchemy`
 2. Executes `alchemy/__init__.py`
-3. Creates package object
-4. Exposes names defined there
+3. Python creates package object (`alchemy = <module object 'alchemy'>`) This object exists **only in RAM while the program runs**. It contains things like:
+	- `alchemy.__name__`
+	- `alchemy.__package__`
+	- `alchemy.__file__`
+	- `alchemy.create_fire` (if exposed in `__init__.py`)
+4. Python compiles `printer.py` and `__init__.py`, then creates `.pyc` files to store **compiled bytecode versions**
+5. Exposes names defined there
+### What is `__pycache__`
 
----
+`__pycache__` is a directory automatically created by Python to store **compiled bytecode versions (`.pyc` files)** of modules that were **imported during program execution**.
 
+When you run a script that imports a package, Python does the following:
+
+1. Reads the `.py` source file of the module being imported.
+    
+2. Compiles it into **Python bytecode** (a lower-level representation executed by the Python interpreter).
+    
+3. Saves that compiled version inside a folder named `__pycache__`, usually in the **same directory as the module**.
+    
+
+For example, if your structure is:
+
+```
+alchemy/
+├── __init__.py
+├── printer.py
+tester.py
+```
+
+and `tester.py` contains:
+
+```python
+from alchemy import printer
+```
+
+When you run:
+
+```
+python3 tester.py
+```
+
+Python compiles `printer.py` and `__init__.py`, then creates:
+
+```
+alchemy/
+├── __init__.py
+├── printer.py
+└── __pycache__/
+    ├── __init__.cpython-311.pyc
+    └── printer.cpython-311.pyc
+```
+
+These `.pyc` files allow Python to **load the module faster in future executions**, because it can reuse the compiled bytecode instead of recompiling the `.py` file every time.
 ### Namespace and API
 
 **Namespace:** A container that holds names (identifiers) and maps them to objects.
@@ -2148,8 +2194,6 @@ from .printer import print_hello
 ## print_secret() in printer.py is internal, not part of the API
 ```
 
----
-
 ### Sacred Scroll
 
 In the subject, the **"Sacred Scroll"** is a fancy name for `__init__.py`:
@@ -2157,8 +2201,6 @@ In the subject, the **"Sacred Scroll"** is a fancy name for `__init__.py`:
 - Controls the public API
 - Can contain metadata (author, version)
 - Decides which functions are exposed and which stay hidden
-
----
 
 ### Alchemy Package Example
 
@@ -2277,7 +2319,7 @@ print(pi)         # pi is directly accessible
 ```python
 ## package/
 ## └── subpackage/
-##     └── module.py
+##     └── module.py: def func(): ...
 
 import package.subpackage.module
 package.subpackage.module.func()
@@ -2316,9 +2358,6 @@ If you try to `import a` or `import b`, Python gets stuck because:
 - `b.py` imports `a.py`
 - Python is still trying to finish loading `a.py` → `func_a` doesn't exist yet
 - Crash or `ImportError` occurs
-
----
-
 ### How to Fix Circular Dependencies
 
 **1️⃣ Late Import (Recommended)**
@@ -2365,9 +2404,6 @@ Both `spellbook.py` and `validator.py` import `utils.py`. No circular import occ
 # Absolute & Relative Imports
 
 Both are ways to tell Python where to find a module or function.
-
----
-
 ### 1️⃣ Absolute Import
 
 Specifies the full path from the top-level package.
@@ -2411,17 +2447,15 @@ def philosophers_stone():
 ✅ Shorter paths in deeply nested packages, easier to reorganize packages internally.
 ❌ Can be confusing if you move files around, only works inside a package (not from top-level scripts).
 
----
+### Relative Import (`from .basic import lead_to_gold`)
 
-### How Relative Imports Work
+A relative import uses dots to reference modules **relative to the current package location**. In the statement `from .basic import lead_to_gold`, the dot (`.`) means “start from the current package.” Python determines the current package using the `__package__` variable that is automatically set when the module is imported. If the module belongs to the package `alchemy.transmutation`, then Python resolves the import as `alchemy.transmutation.basic`. It then loads the module `basic.py` located in the same package and imports the function `lead_to_gold` from it. Relative imports are typically used for **internal communication between modules inside the same package**, allowing modules to reference nearby files without writing the full package path.
 
-When a module is imported, Python automatically sets `__package__` to store the full package path of that module. For example, if `advanced.py` is imported as `alchemy.transmutation.advanced`, Python sets `__package__ = "alchemy.transmutation"` inside that file.
+### Top-Level Import (`from basic import lead_to_gold`)
 
-When `from .basic import lead_to_gold` is used, the `.` tells Python to start from the current package defined in `__package__`. Python appends `basic`, producing the full path `alchemy.transmutation.basic`, and directly loads `alchemy/transmutation/basic.py`.
+A top-level import does not reference the current package. Instead, Python searches for the module `basic` in the directories listed in `sys.path`, which include the current working directory, installed packages, and other configured paths. Because no package context is specified, Python expects `basic.py` to exist as a **top-level module**. If the actual file is located inside a package such as `alchemy/transmutation/basic.py`, Python will not find it using this statement and will raise a `ModuleNotFoundError`. To import it correctly in that case, the full package path must be used, such as `from alchemy.transmutation.basic import lead_to_gold`.
 
----
-
-### Parent Relative Import (`from ..basic import ...`)
+### Parent Relative Import (`from ..basic import lead_to_gold`)
 
 ```
 alchemy/
@@ -2437,7 +2471,6 @@ alchemy/
 In `advanced.py`, `from ..basic import lead_to_gold` uses `..` to move one package level up from the current module (`alchemy.transmutation.potions.codes`), navigating up to `alchemy.transmutation.potions`, then looking for `basic` relative to that level.
 
 ---
-
 # Protocol
 
 In Python, a **Protocol** is a type-hinting mechanism that defines a set of methods or behaviors an object must implement so Python knows how to interact with it. It is essentially an interface defined by **behavior**, not by inheritance. This idea is called **duck typing**.
